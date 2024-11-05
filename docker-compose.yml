@@ -89,7 +89,7 @@ services:
 
 
   webserver:
-    image: apache/airflow:2.6.0-python3.10
+    image: apache/airflow:2.10.0-python3.10
     command: webserver
     entrypoint: ['bash','/opt/airflow/handlers/entrypoint.sh']
     depends_on:
@@ -106,7 +106,7 @@ services:
     volumes:
       - ./dags:/opt/airflow/dags
       - ./handlers/entrypoint.sh:/opt/airflow/handlers/entrypoint.sh
-#      - ./requirements.txt:/opt/airflow/requirements.txt
+      - ./requirements.txt:/opt/airflow/requirements.txt
     ports:
       - "8080:8080"
     healthcheck:
@@ -118,14 +118,14 @@ services:
       - confluent
 
   scheduler:
-    image: apache/airflow:2.6.0-python3.10
+    image: apache/airflow:2.10.0-python3.10
     depends_on:
       webserver:
         condition: service_healthy
     volumes:
       - ./dags:/opt/airflow/dags
       - ./handlers/entrypoint.sh:/opt/airflow/handlers/entrypoint.sh
-#      - ./requirements.txt:/opt/airflow/requirements.txt
+      - ./requirements.txt:/opt/airflow/requirements.txt
     environment:
       - LOAD_EX=n
       - EXECUTOR=Sequential

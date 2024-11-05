@@ -1,9 +1,9 @@
+import time
 import uuid
 from datetime import datetime
-import time 
+
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-
 
 default_args = {
     "owner": "polly_wanna_cracker",
@@ -13,12 +13,12 @@ default_args = {
 def get_data() -> dict:
     import requests
 
-    result = requests.get("https://api.chucknorris.io/jokes/random")
-    result = result.json()["result"][0]
+    result = requests.get("https://randomuser.me/api/")
+    result = result.json()["results"][0]
 
     return result
 
-def data_formated(result: dict) -> dict:
+def data_formatted(result: dict) -> dict:
     data = {}
     location = result["location"]
     data["id"] = str(uuid.uuid4())
@@ -41,15 +41,16 @@ def data_formated(result: dict) -> dict:
 
 def stream_data() -> None:
     import json
-    from kafka import KafkaProducer
     import logging
 
+    from kafka import KafkaProducer
+
     result = get_data()
-    data_formated = data_formated(result)
+    result_data = data_formatted(result)
 
     time_limit = 666
 
-    producer = KafkaProducer(bootstrap_servers="broker:29092", max_block_ms=5000)
+    producer = KafkaProducer(bootstrap_servers=["broker:29092"], max_block_ms=5000)
     topic_name = "creating_user_topic"
     current_time = time.time()
     while True:
@@ -57,23 +58,23 @@ def stream_data() -> None:
             break
         try:
             result = get_data()
-            data_formated = data_formated(result)
-            producer.send(topic_name, json.dumps(data_formated).encode("utf-8"))
+            result_data = data_formatted(result)
+            producer.send(topic_name, json.dumps(result_data).encode("utf-8"))
         except Exception as e:
             logging.error(f"Error kafka send: {e}")
 
 with DAG(
     "user_automation",
     default_args=default_args,
-    schedule_interval="@daily",
+    schedule="@daily",
     catchup=False
 ) as dag:
-    stream_data = PythonOperator(
+    streaming_task = PythonOperator(
         task_id="stream_data",
         python_callable=stream_data
     )
 
-    stream_data
+    streaming_task
 
 
 
