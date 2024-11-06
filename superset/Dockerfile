@@ -3,8 +3,7 @@ FROM apache/superset:latest
 USER root
 
 RUN pip install --upgrade pip
-RUN pip install cassandra-driver
-RUN pip install cassandra-sqlalchemy
+RUN pip install clickhouse-connect
 
 COPY ./superset-init.sh /superset-init.sh
 RUN chmod +x /superset-init.sh
