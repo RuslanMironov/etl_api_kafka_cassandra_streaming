@@ -48,7 +48,7 @@ def stream_data() -> None:
     result = get_data()
     result_data = data_formatted(result)
 
-    time_limit = 666
+    time_limit =300
 
     producer = KafkaProducer(bootstrap_servers=["broker:29092"], max_block_ms=5000)
     topic_name = "creating_user_topic"
