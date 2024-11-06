@@ -2,4 +2,5 @@
 /shelf/
 /workspace.xml
 /vcs.xml
-/dags/__pycache__
+/dags/__pycache__/streaming_dags.cpython-310.pyc
+/dags/__pycache__/test_streaming_dags.cpython-310.pyc

@@ -169,21 +169,19 @@ services:
     networks:
       - confluent
 
-  clickhouse-server:
-    image: yandex/clickhouse-server:latest
+  cassandra_db:
+    image: cassandra:latest
+    container_name: cassandra
+    hostname: cassandra
     ports:
-      - "8123:8123"
-      - "9000:9000"
+      - "9042:9042"
     environment:
-      CLICKHOUSE_USER: clickhouse
-      CLICKHOUSE_PASSWORD: clickhouse
-      CLICKHOUSE_DATABASE: user_api_db
-
-  clickhouse-client:
-    image: yandex/clickhouse-client:latest
-    depends_on:
-      - clickhouse-server
-    entrypoint: /bin/sh -c 'while ! clickhouse-client -h clickhouse-server --query "SELECT 1" ; do sleep 1 ; done;'
+      - MAX_HEAP_SIZE=512M
+      - HEAP_NEWSIZE=100M
+      - CASSANDRA_USERNAME=cassandra
+      - CASSANDRA_PASSWORD=cassandra
+    networks:
+      - confluent
 
 networks:
   confluent:

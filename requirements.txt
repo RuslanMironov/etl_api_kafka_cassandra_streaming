@@ -2,3 +2,5 @@ apache-airflow==2.10.0
 requests
 kafka-python
 pendulum
+cassandra-driver
+pyspark
