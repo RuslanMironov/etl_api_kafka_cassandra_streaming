@@ -1,1 +1,13 @@
-# etl_clickhouse_project
+# Etl streaming to cassandra
+### Стек проекта: apache airflow, apache cassandra, apache kafka, spark streaming, apache superset.
+## Введение
+Проект показывает развертывание и передачу данных в cassandra db при помощи spark streaming и kafka. Взаимодействие и автоматизацию передачи данных в kafka при помощи оркестратора етл airflow и источника данных random user api. Для возможно развития проекта добавлен инструмент визуализации superset.
+
+## Использование
+
+1. Клонируйте этот репозиторий на свой локальный компьютер.
+2. Используйте команду docker-compose up -d, находясь в директории с файлом yml. (для запуска spark понадобится java)
+3. Запустить скрипт в терминале - ./hanlders/spark_stream_to_cassandra.py (временное решение)
+
+## Выбор технологий
+За счет Kafka, Cassandra и Spark можно добиться легкой масштабируемости при росте обьемов данных. Также Kafka обеспечивает надежную передачу данных в режиме реального времени, под управлением airflow.
