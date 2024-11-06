@@ -182,6 +182,20 @@ services:
       - CASSANDRA_PASSWORD=cassandra
     networks:
       - confluent
+  superset:
+    build:
+      context: ./superset
+      dockerfile: Dockerfile
+    container_name: superset
+    restart: unless-stopped
+    environment:
+      - ADMIN_USERNAME=admin
+      - ADMIN_EMAIL=admin@superset.com
+      - ADMIN_PASSWORD=admin
+    ports:
+      - '8088:8088'
+    networks:
+      - confluent
 
 networks:
   confluent:
