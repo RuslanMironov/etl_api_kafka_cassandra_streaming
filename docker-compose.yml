@@ -196,6 +196,15 @@ services:
       - '8088:8088'
     networks:
       - confluent
+  run:
+    image: "spark_streaming_run"
+    depends_on:
+      - scheduler
+    volumes:
+      - ./hanlders
+    command: python3 spark_stream_to_cassandra.py
+    networks:
+      - confluent
 
 networks:
   confluent:
